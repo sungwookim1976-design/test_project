@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>유라이브 강남서비스센터</title>
+
+<link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css" />
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+
+<style>
+  /* ── 기본 리셋 ── */
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Pretendard', sans-serif; line-height: 1.6; background-color: #f8f9fa; }
+  a { text-decoration: none; }
+
+  /* ── 1. 상단 네비게이션 (GNB) ── */
+  .urive-gnb {
+    background-color: #6C8193;
+    height: 70px;
+    display: flex;
+    justify-content: center;
+    border-bottom: 1px solid rgba(0,0,0,0.1);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+  }
+  .gnb-inner {
+    width: 100%;
+    max-width: 1200px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 20px;
+  }
+  .gnb-left { display: flex; align-items: center; height: 100%; flex: 1; }
+  .logo-box { display: flex; align-items: center; gap: 12px; color: #fff; margin-right: 60px; }
+  .logo-symbol {
+    width: 36px; height: 36px; background-color: #ffffff; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center; color: #6C8193; font-size: 1.1rem;
+  }
+  .font-orbitron { font-family: 'Orbitron', sans-serif; font-size: 1.8rem; letter-spacing: 2px; font-weight: 900; text-transform: uppercase; }
+
+  .mobile-menu-btn { display: none; background: none; border: none; color: #fff; font-size: 1.6rem; cursor: pointer; margin-right: 15px; }
+
+  .gnb-menu { display: flex; list-style: none; gap: 40px; height: 100%; }
+  .gnb-menu > li { position: relative; display: flex; align-items: center; height: 100%; }
+  .gnb-menu > li > a { color: #fff; font-size: 1.05rem; font-weight: 500; transition: color 0.2s; }
+  .gnb-menu > li:hover > a { color: #7bd0ff; }
+  .gnb-menu > li:not(:last-child)::after {
+    content: '·'; position: absolute; right: -22px; color: rgba(255,255,255,0.4); font-size: 1.2rem;
+  }
+
+  .sub-menu {
+    position: absolute; top: 70px; left: 50%; transform: translateX(-50%);
+    background-color: #ffffff; min-width: 150px; padding: 15px 0;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1); border-radius: 0 0 8px 8px;
+    display: none; flex-direction: column; text-align: center; border-top: 1px solid #eaeaea; z-index: 200;
+  }
+  .gnb-menu > li:hover .sub-menu { display: flex; }
+  .sub-menu li { width: 100%; padding: 8px 0; }
+  .sub-menu a { color: #555555; font-size: 0.95rem; display: block; transition: color 0.2s; }
+  .sub-menu a:hover { color: #1a6bcc; font-weight: 700; }
+
+  .gnb-phone-num {
+    display: flex; align-items: center; gap: 8px; color: #fff; font-size: 1.05rem; font-weight: 700;
+    margin-left: 32px; white-space: nowrap; transition: color 0.2s;
+  }
+  .gnb-phone-num:hover { color: #7bd0ff; }
+  .gnb-phone-num i { font-size: 0.95rem; color: #7bd0ff; }
+
+  .gnb-contact { display: flex; gap: 12px; }
+  .gnb-contact a {
+    width: 44px; height: 44px; border-radius: 50%; background-color: #f4f6f9;
+    display: flex; align-items: center; justify-content: center; font-size: 1.2rem;
+    transition: all 0.2s ease; box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  }
+  .icon-phone { color: #27ae60; }
+  .icon-sms { color: #1a6bcc; }
+
+  /* ── 2. 메인 히어로 배너 ── */
+  .urive-hero { position: relative; height: 550px; background-image: url('http://www.urive.co.kr/urive/imgs/main_bg.png'); background-size: cover; background-position: center; overflow: hidden; }
+  .urive-hero::before { content: ''; position: absolute; inset: 0; background-color: rgba(0, 0, 0, 0.65); z-index: 1; }
+  .hero-slider-wrap { display: flex; width: 400%; height: 100%; transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1); position: relative; z-index: 2; }
+  .hero-slide { width: 25%; height: 100%; display: flex; align-items: center; justify-content: center; }
+  .hero-inner { width: 100%; max-width: 1200px; display: flex; align-items: center; justify-content: space-between; padding: 0 20px; }
+  .hero-text { color: #fff; flex: 1; }
+  .hero-text h2 { font-size: clamp(1.8rem, 3vw, 2.4rem); font-weight: 800; margin-bottom: 12px; }
+  .hero-text h1 { font-size: clamp(2.2rem, 4vw, 3.5rem); font-weight: 500; color: #F5D6B4; }
+  .hero-image { flex: 1; display: flex; justify-content: flex-end; }
+  .hero-image img { max-width: 100%; width: 500px; filter: drop-shadow(0 20px 40px rgba(0,0,0,0.9)); }
+  .hero-dots { position: absolute; bottom: 30px; left: 50%; transform: translateX(-50%); display: flex; gap: 12px; z-index: 10; }
+  .hero-dot { width: 12px; height: 12px; border-radius: 50%; background: rgba(255,255,255,0.3); cursor: pointer; }
+  .hero-dot.active { background: #6C8193; }
+
+  /* ── 3. 제품 섹션 공통 ── */
+  .product-section { padding: 80px 5%; display: none; }
+  .product-section.active-section { display: block; }
+  .product-section-inner { max-width: 1200px; margin: 0 auto; }
+  .product-section-title { font-size: 1.8rem; font-weight: 800; color: #1a1a2e; padding-bottom: 20px; border-bottom: 2px solid #e0e0e0; margin-bottom: 40px; }
+  .product-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; }
+  .product-card { border: 1px solid #e8e8e8; border-radius: 12px; padding: 24px 16px 20px; text-align: center; transition: all 0.25s ease; background: #fff; cursor: pointer; }
+  .product-card:hover { border-color: #6C8193; box-shadow: 0 8px 30px rgba(108,129,147,0.15); transform: translateY(-4px); }
+  .product-card-img { width: 100%; height: 140px; object-fit: contain; margin-bottom: 16px; }
+  .product-card-name { font-size: 0.95rem; font-weight: 700; color: #1a6bcc; margin-bottom: 4px; }
+  .product-card-code { font-size: 0.8rem; color: #888; margin-bottom: 12px; }
+  .product-badges { display: flex; flex-wrap: wrap; gap: 6px; justify-content: center; }
+  .badge { display: inline-block; padding: 3px 10px; border-radius: 4px; font-size: 0.75rem; font-weight: 600; border: 1px solid #d0d0d0; color: #555; background: #f8f8f8; }
+  .badge-blue { border-color: #1a6bcc; color: #1a6bcc; background: #eef4ff; }
+  .badge-green { border-color: #27ae60; color: #27ae60; background: #edfaf3; }
+
+  /* ── 4. A/S 센터 영역 ── */
+  .as-center-content { background-color: #0d1b2e; color: #fff; padding: 100px 5%; }
+  .as-inner { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: repeat(3, 1fr); gap: 40px; }
+  .as-center-content h2 { font-size: 1.5rem; font-weight: 700; color: #fff; margin-bottom: 24px; }
+  .item, .specialty, .as-info-item { display: flex; align-items: center; gap: 16px; padding: 16px; background-color: rgba(255,255,255,0.05); border-radius: 8px; margin-bottom: 15px; }
+  .item-icon { width: 60px; height: 60px; border-radius: 12px; background: rgba(255,255,255,0.1); display: flex; align-items: center; justify-content: center; font-size: 1.8rem; color: #F5D6B4; }
+  .phone-num { font-size: 1.2rem; font-weight: 700; color: #F5D6B4; }
+
+  /* ── 5. 모달창 스타일 ── */
+  .modal-overlay {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background-color: rgba(0, 0, 0, 0.7); display: none; z-index: 9999;
+    align-items: center; justify-content: center;
+  }
+  .modal-content {
+    position: relative; width: 90%; max-width: 1200px; height: 85vh;
+    background: #fff; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    overflow: hidden; display: flex; flex-direction: column;
+  }
+  .modal-close-btn {
+    position: absolute; top: 15px; right: 20px; font-size: 2.5rem; color: #333;
+    background: none; border: none; cursor: pointer; z-index: 10000;
+  }
+  .iframe-container { flex: 1; width: 100%; height: 100%; padding-top: 60px; }
+  .iframe-container iframe { width: 100%; height: 100%; border: none; }
+
+  /* ── 6. 풋터 ── */
+  .main-footer { background-color: #6c8193; color: rgba(255,255,255,0.8); padding: 40px 5%; border-top: 1px solid rgba(255,255,255,0.1); }
+  .footer-inner { max-width: 1200px; margin: 0 auto; }
+
+  /* 반응형 모바일 */
+  @media (max-width: 768px) {
+    .mobile-menu-btn { display: block; }
+    .logo-box { margin-right: 0; }
+    .gnb-phone-num { display: none; }
+    .gnb-menu { display: none; position: absolute; top: 70px; left: 0; width: 100%; background: #fff; flex-direction: column; border-top: 1px solid #eaeaea; }
+    .gnb-menu > li { height: auto; border-bottom: 1px solid #f1f1f1; align-items: flex-start; }
+    .gnb-menu > li > a { color: #333; padding: 16px 20px; width: 100%; display: flex; justify-content: space-between; }
+    .sub-menu { position: static; transform: none; box-shadow: none; display: none; background: #f9f9f9; }
+    .sub-menu a { padding: 12px 20px 12px 40px; text-align: left; }
+    .product-grid { grid-template-columns: repeat(2, 1fr); }
+    .as-inner { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<header class="urive-gnb">
+  <div class="gnb-inner">
+    <div class="gnb-left">
+      <button class="mobile-menu-btn"><i class="fas fa-bars"></i></button>
+      <a href="#" class="logo-box" id="logoHome">
+        <div class="logo-symbol"><i class="fas fa-video"></i></div>
+        <span class="font-orbitron">URIVE</span>
+      </a>
+      <ul class="gnb-menu">
+        <li>
+          <a href="#">블랙박스 <i class="fas fa-chevron-down" style="font-size:0.8em; margin-top:4px;"></i></a>
+          <ul class="sub-menu">
+            <li><a href="#" data-section="qhd">QHD 제품</a></li>
+            <li><a href="#" data-section="fullhd">FULL HD 제품</a></li>
+            <li><a href="#" data-section="hd">HD 제품</a></li>
+          </ul>
+        </li>
+        <li>
+          <a href="#">내비게이션 <i class="fas fa-chevron-down" style="font-size:0.8em; margin-top:4px;"></i></a>
+          <ul class="sub-menu">
+            <li><a href="#" data-section="navi">내비게이션</a></li>
+          </ul>
+        </li>
+        <li><a href="#" data-section="as">고객지원</a></li>
+      </ul>
+      <a href="tel:010-4613-6062" class="gnb-phone-num">
+        <i class="fas fa-phone-alt"></i> 010-4613-6062
+      </a>
+    </div>
+    <div class="gnb-contact">
+      <a href="tel:010-4613-6062" class="icon-phone" title="전화 상담"><i class="fas fa-phone-alt"></i></a>
+      <a href="sms:010-4613-6062" class="icon-sms" title="문자 상담"><i class="fas fa-comment"></i></a>
+    </div>
+  </div>
+</header>
+
+<section class="urive-hero" id="heroSection">
+  <div class="hero-slider-wrap" id="uriveSlider">
+    <div class="hero-slide"><div class="hero-inner"><div class="hero-text"><h2>선명한 밤의 기록</h2><h1>ALLBAMY QF100</h1></div><div class="hero-image"><img src="http://www.urive.co.kr/urive/imgs/gallery_ALLBAMY_QF100.png" alt="QF100"></div></div></div>
+    <div class="hero-slide"><div class="hero-inner"><div class="hero-text"><h2>초고화질 블랙박스</h2><h1>Albatross Q9000</h1></div><div class="hero-image"><img src="http://www.urive.co.kr/urive/imgs/gallery_albaq9000.png" alt="Q9000"></div></div></div>
+  </div>
+  <div class="hero-dots"><div class="hero-dot active"></div><div class="hero-dot"></div><div class="hero-dot"></div><div class="hero-dot"></div></div>
+</section>
+
+<section class="product-section" id="section-qhd">
+  <div class="product-section-inner">
+    <h2 class="product-section-title">QHD 블랙박스</h2>
+    <div class="product-grid">
+      <div class="product-card" data-url="http://www.urive.co.kr/products/blackbox/urive_allbamy_QF100.html">
+        <img class="product-card-img" src="http://www.urive.co.kr/urive/qhd/allbamy_QF100.jpg" alt="QF100">
+        <div class="product-card-name">Urive ALLBAMY QF100</div>
+        <div class="product-card-code">(CBB-E830P)</div>
+        <div class="product-badges"><span class="badge">2ch</span><span class="badge badge-blue">3.5" LCD</span></div>
+      </div>
+      <div class="product-card" data-url="http://www.urive.co.kr/products/blackbox/urive_albatross_q9000.html">
+        <img class="product-card-img" src="http://www.urive.co.kr/urive/qhd/2ch_albaq9000.jpg" alt="Q9000">
+        <div class="product-card-name">Urive Albatross Q9000</div>
+        <div class="product-card-code">(CBB-E770P)</div>
+        <div class="product-badges"><span class="badge">2ch</span><span class="badge badge-blue">4.0" LCD</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="product-section" id="section-fullhd">
+  <div class="product-section-inner">
+    <h2 class="product-section-title">FULL HD 블랙박스</h2>
+    <div class="product-grid">
+      <div class="product-card" data-url="http://www.urive.co.kr/products/blackbox/urive_allbamy.html">
+        <img class="product-card-img" src="http://www.urive.co.kr/urive/full_hd/allbamy.jpg" alt="ALLBAMY">
+        <div class="product-card-name">Urive ALLBAMY</div>
+        <div class="product-card-code">(CBB-E800P)</div>
+        <div class="product-badges"><span class="badge">2ch</span><span class="badge badge-blue">3.5" LCD</span></div>
+      </div>
+      <div class="product-card" data-url="http://www.urive.co.kr/products/blackbox/urive_albatross_quad7000.html">
+        <img class="product-card-img" src="http://www.urive.co.kr/urive/full_hd/quad7000.jpg" alt="Quad 7000">
+        <div class="product-card-name">Urive Albatross Quad 7000</div>
+        <div class="product-card-code">(CBB-E780P)</div>
+        <div class="product-badges"><span class="badge">4ch</span><span class="badge badge-blue">4.0" LCD</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="product-section" id="section-hd">
+  <div class="product-section-inner">
+    <h2 class="product-section-title">HD 블랙박스</h2>
+    <div class="product-grid">
+      <div class="product-card" data-url="http://www.urive.co.kr/products/blackbox/urive_hit2.html">
+        <img class="product-card-img" src="http://www.urive.co.kr/urive/hd/2ch_hit2.jpg" alt="HIT2">
+        <div class="product-card-name">Urive HIT2</div>
+        <div class="product-card-code">(UC-3100P)</div>
+        <div class="product-badges"><span class="badge">2ch</span><span class="badge badge-blue">3.5" LCD</span></div>
+      </div>
+      <div class="product-card" data-url="http://www.urive.co.kr/products/blackbox/urive_a5.html">
+        <img class="product-card-img" src="http://www.urive.co.kr/urive/hd/2ch_a5.jpg" alt="A5">
+        <div class="product-card-name">Urive A5</div>
+        <div class="product-card-code">(MD-7800P)</div>
+        <div class="product-badges"><span class="badge">2ch</span><span class="badge badge-blue">3.5" LCD</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="product-section" id="section-navi">
+  <div class="product-section-inner">
+    <h2 class="product-section-title">내비게이션</h2>
+    <div class="product-grid">
+      <div class="product-card" data-url="http://www.urive.co.kr/products/navigation/urive_n200.html">
+        <img class="product-card-img" src="http://www.urive.co.kr/urive/navi/navi_n200.jpg" alt="N200">
+        <div class="product-card-name">Urive N200</div>
+        <div class="product-card-code">(CNV-E100P)</div>
+        <div class="product-badges"><span class="badge badge-blue">7"</span><span class="badge badge-green">지니</span></div>
+      </div>
+      <div class="product-card" data-url="http://www.urive.co.kr/products/navigation/urive_n400.html">
+        <img class="product-card-img" src="http://www.urive.co.kr/urive/navi/navi_n400.jpg" alt="N400">
+        <div class="product-card-name">Urive N400</div>
+        <div class="product-card-code">(UN-400P)</div>
+        <div class="product-badges"><span class="badge badge-blue">8"</span><span class="badge badge-green">아틀란</span><span class="badge">스마트폰연동</span></div>
+      </div>
+      <div class="product-card" data-url="http://www.urive.co.kr/products/navigation/urive_n100.html">
+        <img class="product-card-img" src="http://www.urive.co.kr/urive/navi/navi_n100.jpg" alt="N100">
+        <div class="product-card-name">Urive N100</div>
+        <div class="product-card-code">(UN-100P)</div>
+        <div class="product-badges"><span class="badge badge-blue">7"</span><span class="badge badge-green">지니</span></div>
+      </div>
+      <div class="product-card" data-url="http://www.urive.co.kr/products/navigation/urive_n8.html">
+        <img class="product-card-img" src="http://www.urive.co.kr/urive/navi/navi_n8.jpg" alt="N8">
+        <div class="product-card-name">Urive N8</div>
+        <div class="product-card-code">(MT-300D)</div>
+        <div class="product-badges"><span class="badge badge-blue">8"</span><span class="badge badge-green">아틀란</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="as-center-content" id="asCenterSection">
+  <div class="as-inner">
+    <div class="repair-items">
+      <h2>전문수리품목</h2>
+      <div class="item"><div class="item-icon"><i class="fas fa-camera"></i></div><div class="text"><h3>블랙박스</h3><p>펌웨어 업데이트, 센서 수리</p></div></div>
+      <div class="item"><div class="item-icon"><i class="fas fa-map-marked-alt"></i></div><div class="text"><h3>내비게이션</h3><p>하드웨어 수리, GPS 수리</p></div></div>
+    </div>
+    <div class="official-specialty">
+      <h2>공식센터의 특별함</h2>
+      <div class="specialty"><i class="fas fa-user-tie"></i><span>공인 엔지니어</span></div>
+      <div class="specialty"><i class="fas fa-stopwatch"></i><span>초고속 당일 수리</span></div>
+    </div>
+    <div class="easy-as">
+      <h2>A/S 접수 안내</h2>
+      <div class="as-info-item"><label>고객센터</label><br><span class="phone-num">010-4613-6062</span></div>
+      <div class="as-info-item"><label>주소</label><p>서울특별시 서초구 마방로4길 16-17</p></div>
+    </div>
+  </div>
+</section>
+
+<footer class="main-footer">
+  <div class="footer-inner">
+    <p>유라이브 강남서비스센터 | 대표자 : 김동택 | 사업자 : 122-86-12474 | 010-4613-6062</p>
+    <p>주소 : 서울특별시 서초구 마방로4길 16-17</p>
+    <p style="margin-top:12px; font-size:0.8rem; opacity:0.6;">Copyright © 유라이브 강남서비스센터. All rights reserved.</p>
+  </div>
+</footer>
+
+<div class="modal-overlay" id="productModal">
+  <div class="modal-content">
+    <button class="modal-close-btn" id="closeModalBtn">&times;</button>
+    <div class="iframe-container">
+      <iframe id="modalIframe" src="" frameborder="0"></iframe>
+    </div>
+  </div>
+</div>
+
+<script>
+$(document).ready(function() {
+  /* 모바일 메뉴 */
+  $('.mobile-menu-btn').on('click', function() { $('.gnb-menu').slideToggle(300); });
+
+  /* 히어로 슬라이더 */
+  let currentIdx = 0;
+  const slideCount = $('.hero-slide').length;
+  setInterval(function() {
+    currentIdx = (currentIdx + 1) % slideCount;
+    $('#uriveSlider').css('transform', 'translateX(' + -(currentIdx * 25) + '%)');
+    $('.hero-dot').removeClass('active').eq(currentIdx).addClass('active');
+  }, 4000);
+
+  /* 섹션 전환 로직 */
+  $('[data-section]').on('click', function(e) {
+    e.preventDefault();
+    const sec = $(this).data('section');
+    $('.product-section').removeClass('active-section');
+    if(sec === 'as') {
+      $('#heroSection').show();
+      $('html, body').animate({ scrollTop: $('#asCenterSection').offset().top - 80 }, 400);
+    } else if(sec) {
+      $('#heroSection').hide();
+      $('#section-' + sec).addClass('active-section');
+      $('html, body').animate({ scrollTop: $('#section-' + sec).offset().top - 80 }, 400);
+    }
+    if ($(window).width() <= 768) { $('.gnb-menu').slideUp(300); }
+  });
+
+  $('#logoHome').on('click', function() { location.reload(); });
+
+  /* ── 제품 모달창 동작 (공용) ── */
+  $('.product-card').on('click', function() {
+    const targetUrl = $(this).data('url');
+    if (targetUrl) {
+      $('#modalIframe').attr('src', targetUrl);
+      $('#productModal').css('display', 'flex').hide().fadeIn(300);
+      $('body').css('overflow', 'hidden'); // 뒤쪽 스크롤 방지
+    }
+  });
+
+  // 모달 닫기 (X 버튼 및 배경 클릭 시)
+  $('#closeModalBtn, #productModal').on('click', function(e) {
+    if (e.target === this) {
+      $('#productModal').fadeOut(200, function() {
+        $('#modalIframe').attr('src', ''); // 내용 비우기
+      });
+      $('body').css('overflow', 'auto'); // 스크롤 복구
+    }
+  });
+});
+</script>
+
+</body>
+</html>
